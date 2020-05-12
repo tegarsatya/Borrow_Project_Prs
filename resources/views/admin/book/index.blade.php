@@ -4,7 +4,7 @@
 <div class="box">
     <div class="box-header">
         <h3 class="box-title">Data Penulis</h3>
-        <a href="{{ route('admin.author.create') }}" class="btn btn-primary">Tambah Penulis</a>
+        <a href="{{ route('admin.book.create') }}" class="btn btn-primary">Tambah Penulis</a>
     </div>
 
     <div class="box-body">
@@ -13,7 +13,10 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Nama</th>
+                    <th>title</th>
+                    <th>Deskripsi</th>
+                    <th>cover</th>
+                    <th>Qty</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -42,10 +45,13 @@
             $('#dataTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('admin.author.data') }}',
+                ajax: '{{ route('admin.book.data') }}',
                 columns: [
                     { data: 'DT_RowIndex', orderable: false, searchable : false},
-                    { data: 'name'},
+                    { data: 'title'},
+                    { data: 'description'},
+                    { data: 'cover'},
+                    { data: 'qty'},
                     { data: 'action'}
                 ]
             });
