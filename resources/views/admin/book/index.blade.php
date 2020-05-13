@@ -4,7 +4,7 @@
 <div class="box">
     <div class="box-header">
         <h3 class="box-title">Data Penulis</h3>
-        <a href="{{ route('admin.book.create') }}" class="btn btn-primary">Tambah Penulis</a>
+        <a href="{{ route('admin.book.create') }}" class="btn btn-primary">Tambah Buku</a>
     </div>
 
     <div class="box-body">
@@ -13,10 +13,10 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>title</th>
+                    <th>Judul</th>
                     <th>Deskripsi</th>
-                    <th>cover</th>
-                    <th>Qty</th>
+                    <th>Penulis</th>
+                    <th>Sampul</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -50,9 +50,9 @@
                     { data: 'DT_RowIndex', orderable: false, searchable : false},
                     { data: 'title'},
                     { data: 'description'},
+                    { data: 'author'},
                     { data: 'cover'},
-                    { data: 'qty'},
-                    { data: 'action'}
+                    { data: 'action'},
                 ]
             });
         });

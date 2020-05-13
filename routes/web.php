@@ -13,11 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::get('/', 'Frontend\\BookController@index')->name('homepage');
 
+Route::get('/book/{book}', 'Frontend\\BookController@show')->name('book.show');
 
 Auth::routes(['verify'=> true]);
 

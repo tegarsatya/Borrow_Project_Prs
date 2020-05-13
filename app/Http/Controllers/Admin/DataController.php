@@ -22,18 +22,17 @@ class DataController extends Controller
 
     public function books()
     {
-        $books = Book::orderBy('title', 'ASC');
+        $books = Book::orderBy('title', 'ASC')->get();
 
-        // $books->load('author');
+        $books->load('author');
 
         return datatables()->of($books)
-
             ->addColumn('author', function (Book $model) {
-                 return $model->author->name;
-             })
-             ->editColumn('cover', function (Book $model) {
-                return '<img src="' . $model->cover .'" height="150px">';
-             })
+                return $model->author->name;
+            })
+            ->editColumn('cover', function (Book $model) {
+                return '<img src="' . $model->getCover() . '" height="150px" >';
+            })
             ->addColumn('action', 'admin.book.action')
             ->addIndexColumn()
             ->rawColumns(['cover', 'action'])

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Author;
+use App\Book;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -15,7 +18,7 @@ class BookController extends Controller
     public function index()
     {
         return view('admin.book.index', [
-            'title'     => 'Data Buku',
+            'title' => 'Data Buku',
         ]);
     }
 
@@ -26,7 +29,10 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.book.create', [
+            'title' => 'Tambah Buku',
+            'authors' => Author::orderBy('name', 'ASC')->get(),
+        ]);
     }
 
     /**
@@ -37,7 +43,29 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'description' => 'required|min:20',
+            'author_id' => 'required',
+            'cover' => 'file|image',
+            'qty' => 'required|numeric'
+        ]);
+
+        $cover = null;
+
+        if ($request->hasFile('cover')) {
+            $cover = $request->file('cover')->store('assets/covers');
+        }
+
+        Book::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'author_id' => $request->author_id,
+            'cover' => $cover,
+            'qty' => $request->qty,
+        ]);
+
+        return redirect()->route('admin.book.index')->withSuccess('Data buku berhasil ditambahkan');
     }
 
     /**
@@ -57,9 +85,13 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Book $book)
     {
-        //
+        return view('admin.book.edit', [
+            'title' => 'Ubah data buku',
+            'book' => $book,
+            'authors' => Author::orderBy('name', 'ASC')->get(),
+        ]);
     }
 
     /**
@@ -69,9 +101,32 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'description' => 'required|min:20',
+            'author_id' => 'required',
+            'cover' => 'file|image',
+            'qty' => 'required|numeric'
+        ]);
+
+        $cover = $book->cover;
+
+        if ($request->hasFile('cover')) {
+            Storage::delete($book->cover);
+            $cover = $request->file('cover')->store('assets/covers');
+        }
+
+        $book->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'author_id' => $request->author_id,
+            'cover' => $cover,
+            'qty' => $request->qty,
+        ]);
+
+        return redirect()->route('admin.book.index')->withSuccess('Data buku berhasil diperbarui');
     }
 
     /**
@@ -80,8 +135,10 @@ class BookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        //
+        $book->delete();
+
+        return redirect()->route('admin.book.index')->withDanger('Data buku sudah dihapus');
     }
 }
