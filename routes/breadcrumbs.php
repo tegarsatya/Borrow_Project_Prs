@@ -49,3 +49,13 @@ Breadcrumbs::for('admin.borrow.index', function ($trail) {
     $trail->push('Beranda', route('admin.dashboard'));
     $trail->push('Peminjaman', route('admin.borrow.index'));
 });
+
+// Borrow Index
+Breadcrumbs::for('admin.report.top-book', function ($trail) {
+    $trail->push('Beranda', route('admin.dashboard'));
+});
+
+// Borrow Index
+Breadcrumbs::for('admin.report.top-user', function ($trail) {
+    $trail->push('Beranda', route('admin.dashboard'));
+});

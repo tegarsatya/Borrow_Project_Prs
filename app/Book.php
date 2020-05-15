@@ -30,4 +30,11 @@ class Book extends Model
     {
         return $this->belongsToMany(User::class, 'borrow_history')->withTimestamps();
     }
+
+    public function scopeIsStillBorrow($query, $bookId)
+    {
+        return $query->where('books.id', $bookId)
+                 ->where('returned_at', null)
+                 ->count() > 0;
+    }
 }
